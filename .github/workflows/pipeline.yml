@@ -35,7 +35,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Current Commit
         env:
-          COMMITS: ${{ toJson(github.commits) }}
+          COMMITS: ${{ toJson(github) }}
         if: ${{ github.event_name == 'push' }}
         run: echo "$COMMITS"
       # - name: Test Success
