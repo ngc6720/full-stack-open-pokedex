@@ -35,7 +35,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Current Commit
         env:
-          COMMIT: ${{ toJson(github.event.commits[0]) }}
+          COMMIT: ${{ toJson(github.event.commits) }}
         run: echo "$COMMIT"
       # - name: Test Success
       #   uses: rjstone/discord-webhook-notify@v1.0.4
