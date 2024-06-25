@@ -2,6 +2,6 @@
 
 echo "Build script"
 
-npm install --omit=dev
+npm install
 
 npm run build
