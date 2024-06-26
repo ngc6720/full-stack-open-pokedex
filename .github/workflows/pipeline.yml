@@ -33,24 +33,31 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      - name: Current Commit
+      - name: Current Commit success message
         env:
-          COMMITS: ${{ toJson(github.event.commits[0].url) }}
+          SUCCESS: ${{ format('to {0} by {1} :3', secrets.WEBSITE_URL, github.event.commits[0].author.name) }}
         if: ${{ github.event_name == 'push' }}
-        run: echo "$COMMITS"
+        run: echo "$SUCCESS"
+      - name: Current Commit error message
+        env:
+          ERROR: ${{ format( 'Commit {0} by {1} broke the build :C', github.event.commits[0].url, github.event.commits[0].author.name) }}
+        if: ${{ github.event_name == 'push' }}
+        run: echo "$ERROR"
       # - name: Test Success
       #   uses: rjstone/discord-webhook-notify@v1.0.4
-      #   if: ${{ success() }}
+      #   if: ${{ github.event_name == 'push' && success() }}
       #   with:
       #     severity: info
-      #     details: Build Succeeded!
+      #     text: A new version of Pokedex deployed
+      #     details: ${{ format('to https://full-stack-open-pokedex-2d90.onrender.com by {0}.', github.event.commits[0].author.name) }}
       #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       # - name: Test Failure
       #   uses: rjstone/discord-webhook-notify@v1.0.4
-      #   if: ${{ failure() }}
+      #   if: ${{ github.event_name == 'push' && failure() }}
       #   with:
       #     severity: error
-      #     details: Build Failed!
+      #     text: Build failed
+      #     details: ${{ format( 'Commit {0} by {1} broke the build :C', github.event.commits[0].url, github.event.commits[0].author.name) }}
       #     webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
