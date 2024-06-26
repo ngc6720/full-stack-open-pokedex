@@ -35,7 +35,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Current Commit success message
         env:
-          SUCCESS: ${{ format('to {0} by {1} :3', secrets.WEBSITE_URL, github.event.commits[0].author.name) }}
+          SUCCESS: ${{ format('to {0} by {1} :3', vars.WEBSITE_URL, github.event.commits[0].author.name) }}
         if: ${{ github.event_name == 'push' }}
         run: echo "$SUCCESS"
       - name: Current Commit error message
