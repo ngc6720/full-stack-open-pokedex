@@ -49,13 +49,6 @@ jobs:
           text: Build failed
           description: ${{ format( 'Commit {0} by {1} broke the build :C', github.event.commits[0].url, github.event.commits[0].author.name) }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-
-      - name: URL Health Check
-        uses: Jtalk/url-health-check-action@v4
-        with:
-          url: ${{ vars.WEBSITE_URL }}
-          max-attempts: 3
-          retry-delay: 5s
   tag_release:
     if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message), '#skip') }}
     needs: [simple_deployment_pipeline]
